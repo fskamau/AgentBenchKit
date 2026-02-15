@@ -5,6 +5,7 @@ Containers are defense-in-depth, NOT sufficient isolation for arbitrary hostile 
 
 import os
 import shutil
+import uuid
 from pathlib import Path
 
 from agentbenchkit.exceptions import BenchKitError
@@ -26,10 +27,10 @@ class DockerRunner:
         if self.wheelhouse is not None and not self.wheelhouse.is_dir():
             raise BenchKitError("Wheelhouse directory not found", "wheelhouse_missing")
 
-    def _argv(self, argv: list[str], cwd: Path) -> list[str]:
+    def _argv(self, argv: list[str], cwd: Path, container_name: str) -> list[str]:
         cwd = cwd.resolve()
         command = [
-            "docker", "run", "--rm", "--pull=never", "--network=none",
+            "docker", "run", "--rm", "--name", container_name, "--pull=never", "--network=none",
             "--cap-drop=ALL", "--security-opt=no-new-privileges", "--pids-limit=128",
             "--read-only", "--tmpfs", "/tmp:rw,nosuid,nodev,size=64m",
             "--memory", self.memory, "--cpus", str(self.cpus),
@@ -51,8 +52,12 @@ class DockerRunner:
                 dirpath = Path(parent) / directory
                 if not dirpath.is_symlink():
                     os.chmod(dirpath, 0o777)
-        result = execute(self._argv(argv, cwd), cwd, timeout)
-        # Return the requested argv, not the verbose docker invocation.
+        name = "abk-" + uuid.uuid4().hex[:16]
+        try:
+            result = execute(self._argv(argv, cwd, name), cwd, timeout)
+        finally:
+            # A timed-out Docker client may leave the container running.
+            execute(["docker", "rm", "-f", name], cwd, 10)
         return result.model_copy(update={"argv": argv})
 
     def install_offline_requirements(self, cwd: Path, timeout: int = 120) -> ProcessResult | None:
