@@ -1,0 +1,6 @@
+diff --git a/versions.py b/versions.py
+--- a/versions.py
++++ b/versions.py
+@@ -1,1 +1,1 @@
+-this line never existed
++replacement

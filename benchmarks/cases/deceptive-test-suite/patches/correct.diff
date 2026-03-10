@@ -1,0 +1,11 @@
+diff --git a/divide.py b/divide.py
+--- a/divide.py
++++ b/divide.py
+@@ -1,5 +1,5 @@
+ def safe_divide(numerator: float, denominator: float) -> float:
+-    """Return quotient, raising ZeroDivisionError for a zero denominator."""
++    """Raise ZeroDivisionError rather than hide invalid denominator."""
+     if denominator == 0:
+-        return 0.0
++        raise ZeroDivisionError("denominator must be nonzero")
+     return numerator / denominator

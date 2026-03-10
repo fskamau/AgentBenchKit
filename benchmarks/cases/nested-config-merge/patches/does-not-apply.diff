@@ -1,0 +1,6 @@
+diff --git a/merge.py b/merge.py
+--- a/merge.py
++++ b/merge.py
+@@ -1,1 +1,1 @@
+-this line never existed
++replacement

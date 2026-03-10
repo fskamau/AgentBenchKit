@@ -1,0 +1,6 @@
+diff --git a/pager.py b/pager.py
+--- a/pager.py
++++ b/pager.py
+@@ -1,1 +1,1 @@
+-this line never existed
++replacement

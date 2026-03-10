@@ -1,0 +1,13 @@
+diff --git a/versions.py b/versions.py
+--- a/versions.py
++++ b/versions.py
+@@ -1,2 +1,8 @@
+ def sort_versions(versions: list[str]) -> list[str]:
+-    return sorted(versions)
++    """Sort MAJOR.MINOR.PATCH components numerically."""
++    def key(version: str) -> tuple[int, int, int]:
++        parts = version.split(".")
++        if len(parts) != 3 or any(not part.isdigit() for part in parts):
++            raise ValueError(f"Expected numeric major.minor.patch: {version}")
++        return tuple(map(int, parts))  # type: ignore[return-value]
++    return sorted(versions, key=key)

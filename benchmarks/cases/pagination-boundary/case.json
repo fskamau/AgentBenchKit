@@ -1,0 +1,26 @@
+{
+  "id": "pagination-boundary",
+  "description": "Fix off-by-one page counts and validate input boundaries",
+  "test_command": [
+    "python",
+    "-m",
+    "unittest",
+    "discover",
+    "-s",
+    "tests",
+    "-v"
+  ],
+  "oracle_command": [
+    "python",
+    "-m",
+    "unittest",
+    "discover",
+    "-s",
+    "oracle_tests",
+    "-v"
+  ],
+  "allowed_changed_files": [
+    "pager.py"
+  ],
+  "timeout_seconds": 30
+}

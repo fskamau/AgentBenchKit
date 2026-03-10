@@ -1,0 +1,26 @@
+{
+  "id": "nested-config-merge",
+  "description": "Preserve nested settings and avoid mutating either input",
+  "test_command": [
+    "python",
+    "-m",
+    "unittest",
+    "discover",
+    "-s",
+    "tests",
+    "-v"
+  ],
+  "oracle_command": [
+    "python",
+    "-m",
+    "unittest",
+    "discover",
+    "-s",
+    "oracle_tests",
+    "-v"
+  ],
+  "allowed_changed_files": [
+    "merge.py"
+  ],
+  "timeout_seconds": 30
+}

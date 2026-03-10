@@ -1,0 +1,7 @@
+diff --git a/versions.py b/versions.py
+--- a/versions.py
++++ b/versions.py
+@@ -1,2 +1,2 @@
+ def sort_versions(versions: list[str]) -> list[str]:
+-    return sorted(versions)
++    return list(reversed(versions))

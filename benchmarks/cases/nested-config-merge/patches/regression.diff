@@ -1,0 +1,10 @@
+diff --git a/merge.py b/merge.py
+--- a/merge.py
++++ b/merge.py
+@@ -1,5 +1,2 @@
+ def merge_config(defaults: dict, overrides: dict) -> dict:
+-    """Combine nested configuration dictionaries."""
+-    merged = dict(defaults)
+-    merged.update(overrides)
+-    return merged
++    return {}

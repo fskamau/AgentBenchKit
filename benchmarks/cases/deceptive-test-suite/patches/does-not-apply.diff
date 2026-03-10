@@ -1,0 +1,6 @@
+diff --git a/divide.py b/divide.py
+--- a/divide.py
++++ b/divide.py
+@@ -1,1 +1,1 @@
+-this line never existed
++replacement

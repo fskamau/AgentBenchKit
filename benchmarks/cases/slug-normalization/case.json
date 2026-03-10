@@ -1,0 +1,26 @@
+{
+  "id": "slug-normalization",
+  "description": "Normalize punctuation, whitespace and case into stable slugs",
+  "test_command": [
+    "python",
+    "-m",
+    "unittest",
+    "discover",
+    "-s",
+    "tests",
+    "-v"
+  ],
+  "oracle_command": [
+    "python",
+    "-m",
+    "unittest",
+    "discover",
+    "-s",
+    "oracle_tests",
+    "-v"
+  ],
+  "allowed_changed_files": [
+    "slug.py"
+  ],
+  "timeout_seconds": 30
+}

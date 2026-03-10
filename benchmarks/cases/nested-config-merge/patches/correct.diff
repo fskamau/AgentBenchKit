@@ -1,0 +1,20 @@
+diff --git a/merge.py b/merge.py
+--- a/merge.py
++++ b/merge.py
+@@ -1,5 +1,12 @@
++from copy import deepcopy
++
++
+ def merge_config(defaults: dict, overrides: dict) -> dict:
+-    """Combine nested configuration dictionaries."""
+-    merged = dict(defaults)
+-    merged.update(overrides)
+-    return merged
++    """Deep-merge maps while preserving unrelated keys and inputs."""
++    result = deepcopy(defaults)
++    for key, value in overrides.items():
++        if isinstance(value, dict) and isinstance(result.get(key), dict):
++            result[key] = merge_config(result[key], value)
++        else:
++            result[key] = deepcopy(value)
++    return result
