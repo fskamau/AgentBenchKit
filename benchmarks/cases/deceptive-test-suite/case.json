@@ -22,5 +22,9 @@
   "allowed_changed_files": [
     "divide.py"
   ],
-  "timeout_seconds": 30
+  "timeout_seconds": 30,
+  "edge_cases": [
+    "test_zero_denominator",
+    "test_zero_over_zero"
+  ]
 }

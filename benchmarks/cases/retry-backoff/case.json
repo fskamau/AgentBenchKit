@@ -22,5 +22,10 @@
   "allowed_changed_files": [
     "retry.py"
   ],
-  "timeout_seconds": 30
+  "timeout_seconds": 30,
+  "edge_cases": [
+    "test_zero_attempts",
+    "test_invalid_base",
+    "test_invalid_attempts"
+  ]
 }

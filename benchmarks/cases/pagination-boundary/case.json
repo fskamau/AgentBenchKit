@@ -22,5 +22,10 @@
   "allowed_changed_files": [
     "pager.py"
   ],
-  "timeout_seconds": 30
+  "timeout_seconds": 30,
+  "edge_cases": [
+    "test_small",
+    "test_invalid_size",
+    "test_negative_count"
+  ]
 }

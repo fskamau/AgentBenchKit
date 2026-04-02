@@ -91,7 +91,8 @@ def _prepare_deps(runner: Runner, cwd: Path) -> str | None:
 def evaluate_patch(source_repo: Path, patch_file: Path, *, case_id: str,
                    test_command: list[str], oracle_dir: Path | None,
                    oracle_command: list[str] | None, allowed_files: list[str] | None,
-                   runner: Runner, timeout: int = 30, engine: str = "local") -> PatchReport:
+                   runner: Runner, timeout: int = 30, engine: str = "local",
+                   edge_cases: list[str] | None = None) -> PatchReport:
     """Use disjoint baseline and candidate copies; independent tests are inserted post-patch."""
     source_repo, patch_file = source_repo.resolve(), patch_file.resolve()
     if not source_repo.is_dir():
@@ -147,7 +148,17 @@ def evaluate_patch(source_repo: Path, patch_file: Path, *, case_id: str,
             _staged_copy(oracle_path, candidate_repo / "oracle_tests")
             oracle = _run_test(oracle_command, candidate_repo, runner, timeout)
 
+    edge_results: dict[str, str] = {}
+    if edge_cases:
+        text = (oracle.process.stdout + "\n" + oracle.process.stderr) if oracle else ""
+        observed = dict(re.findall(r"(?m)^\s*(test_\w+) \([^)]+\) \.\.\. (ok|FAIL|ERROR)", text))
+        edge_results = {name: ("passed" if observed.get(name) == "ok"
+                               else "failed" if name in observed else "missing")
+                        for name in edge_cases}
     evidence = [f"Baseline: {baseline.classification}", f"Patched: {patched.classification}"]
+    if edge_results:
+        evidence.append("Edge-case checklist: " + ", ".join(
+            f"{name}={value}" for name, value in edge_results.items()))
     if oracle:
         evidence.append(f"Independent oracle tests: {oracle.classification}")
     if patched.failed_tests:
@@ -172,4 +183,5 @@ def evaluate_patch(source_repo: Path, patch_file: Path, *, case_id: str,
     return PatchReport(case_id=case_id, base_commit=base_commit, patch_sha256=digest,
                        changed_files=files, patch_applied=True, baseline=baseline,
                        patched=patched, oracle=oracle, classification=classification,
-                       evidence=evidence, engine=engine)  # type: ignore[arg-type]
+                       evidence=evidence, engine=engine,
+                       edge_case_results=edge_results)  # type: ignore[arg-type]

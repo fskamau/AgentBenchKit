@@ -35,6 +35,9 @@ def report_markdown(report: BaseModel) -> str:
         lines += [f"- {line}" for line in data["evidence"]]
         if data["application_error"]:
             lines += ["", f"**Patch application error:** {data['application_error']}"]
+        if data.get("edge_case_results"):
+            lines += ["", "## Edge-case checklist", ""]
+            lines += [f"- {name}: {status}" for name, status in data["edge_case_results"].items()]
         lines += ["", "## Modified files", ""]
         lines += [f"- `{name}`" for name in data["changed_files"]]
     else:

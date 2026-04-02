@@ -22,5 +22,10 @@
   "allowed_changed_files": [
     "slug.py"
   ],
-  "timeout_seconds": 30
+  "timeout_seconds": 30,
+  "edge_cases": [
+    "test_punctuation",
+    "test_symbols",
+    "test_empty"
+  ]
 }

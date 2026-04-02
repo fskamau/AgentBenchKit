@@ -118,6 +118,7 @@ class PatchReport(BaseModel):
     patch_sha256: str
     changed_files: list[str]
     unexpected_files: list[str] = Field(default_factory=list)
+    edge_case_results: dict[str, str] = Field(default_factory=dict)
     patch_applied: bool
     application_error: str | None = None
     baseline: TestResult | None = None
@@ -134,6 +135,7 @@ class BenchmarkCase(BaseModel):
     test_command: list[str] = Field(min_length=1)
     oracle_command: list[str] = Field(min_length=1)
     allowed_changed_files: list[str] = Field(min_length=1)
+    edge_cases: list[str] = Field(default_factory=list)
     timeout_seconds: int = Field(default=30, ge=1, le=3600)
 
 

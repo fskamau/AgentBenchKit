@@ -16,7 +16,7 @@ dependencies = ["pydantic>=2.5,<3", "typer>=0.12,<1"]
 dev = ["pytest>=8", "pytest-cov>=5", "ruff>=0.6", "mypy>=1.10", "build>=1.0"]
 
 [project.scripts]
-agentbenchkit = "agentbenchkit.cli:app"
+agentbenchkit = "agentbenchkit.cli:run"
 
 [tool.setuptools.packages.find]
 where = ["src"]
