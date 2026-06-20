@@ -42,10 +42,11 @@ class Engine(StrEnum):
     LOCAL = "local"
 
 
-def _runner(engine: Engine, allow_local: bool, image: str = "python:3.11-slim"):
+def _runner(engine: Engine, allow_local: bool, image: str = "python:3.11-slim",
+            wheelhouse: Path | None = None):
     if engine == Engine.LOCAL:
         return LocalRunner(allowed=allow_local)
-    return DockerRunner(image=image)
+    return DockerRunner(image=image, wheelhouse=wheelhouse)
 
 
 def _dump(data: object) -> None:
@@ -87,16 +88,28 @@ def repo_baseline(path: Path,
                   command: Annotated[str, typer.Option(help="Argv command, e.g. 'python -m pytest -q'")],
                   engine: Engine = Engine.DOCKER,
                   allow_local: Annotated[bool, typer.Option("--allow-local", help="Consent to execute tests on host")] = False,
-                  timeout: int = 30) -> None:
+                  timeout: int = 30,
+                  image: Annotated[str, typer.Option(help="Locally cached Docker image")] = "python:3.11-slim",
+                  wheelhouse: Annotated[Path | None, typer.Option(help="Offline wheels for requirements.txt")] = None) -> None:
     # The repository is copied, so tests do not operate on its original files.
     import shutil
     import tempfile
 
+    if not path.is_dir():
+        raise BenchKitError(f"Repository does not exist: {path}", "repository_missing")
     with tempfile.TemporaryDirectory(prefix="abk-baseline-") as tmp:
         staging = Path(tmp) / "repo"
-        shutil.copytree(path.resolve(), staging,
+        shutil.copytree(path.resolve(), staging, symlinks=True,
                         ignore=shutil.ignore_patterns(".git", ".venv", "__pycache__"))
-        runner = _runner(engine, allow_local)
+        if any(item.is_symlink() for item in staging.rglob("*")):
+            raise BenchKitError("Repository symlinks rejected for host safety", "repository_symlink")
+        runner = _runner(engine, allow_local, image=image, wheelhouse=wheelhouse)
+        install = getattr(runner, "install_offline_requirements", None)
+        if install is not None:
+            installed = install(staging)
+            if installed is not None and installed.exit_code != 0:
+                raise BenchKitError("Dependency installation failed: " +
+                                    (installed.stderr or installed.stdout), "dependency_install_failed")
         result = test_result(runner.run(shlex.split(command), staging, timeout))
         _dump(result.model_dump(mode="json"))
 
@@ -110,10 +123,12 @@ def patch_evaluate(repo: Path, patch: Path,
                    engine: Engine = Engine.DOCKER,
                    allow_local: Annotated[bool, typer.Option("--allow-local")] = False,
                    timeout: int = 30,
+                   image: Annotated[str, typer.Option(help="Cached Docker image")] = "python:3.11-slim",
+                   wheelhouse: Annotated[Path | None, typer.Option(help="Offline wheels")] = None,
                    output: Annotated[Path | None, typer.Option(help="Output prefix")] = None) -> None:
     report = evaluate_patch(repo, patch, case_id=repo.name, test_command=shlex.split(command),
                             oracle_dir=oracle_dir, oracle_command=shlex.split(oracle_command),
-                            allowed_files=allowed_file, runner=_runner(engine, allow_local),
+                            allowed_files=allowed_file, runner=_runner(engine, allow_local, image=image, wheelhouse=wheelhouse),
                             timeout=timeout, engine=engine.value)
     _dump(report.model_dump(mode="json"))
     if output:
@@ -133,9 +148,11 @@ def benchmark_run(case_id: str,
                   engine: Engine = Engine.DOCKER,
                   allow_local: Annotated[bool, typer.Option("--allow-local")] = False,
                   output: Annotated[Path | None, typer.Option(help="Output prefix")] = None,
-                  cases_dir: Annotated[Path | None, typer.Option()] = None) -> None:
+                  cases_dir: Annotated[Path | None, typer.Option()] = None,
+                  image: Annotated[str, typer.Option()] = "python:3.11-slim",
+                  wheelhouse: Annotated[Path | None, typer.Option()] = None) -> None:
     result = run_case(cases_dir or default_cases_dir(), case_id, candidate=candidate,
-                      runner=_runner(engine, allow_local), engine=engine.value)
+                      runner=_runner(engine, allow_local, image=image, wheelhouse=wheelhouse), engine=engine.value)
     _dump(result.model_dump(mode="json"))
     if output:
         for file in write_reports(result, output):
@@ -146,9 +163,11 @@ def benchmark_run(case_id: str,
 def benchmark_suite(engine: Engine = Engine.DOCKER,
                     allow_local: Annotated[bool, typer.Option("--allow-local")] = False,
                     output: Annotated[Path, typer.Option(help="Output directory")] = Path("reports-out/suite"),
-                    cases_dir: Annotated[Path | None, typer.Option()] = None) -> None:
+                    cases_dir: Annotated[Path | None, typer.Option()] = None,
+                    image: Annotated[str, typer.Option()] = "python:3.11-slim",
+                    wheelhouse: Annotated[Path | None, typer.Option()] = None) -> None:
     source = cases_dir or default_cases_dir()
-    runner = _runner(engine, allow_local)
+    runner = _runner(engine, allow_local, image=image, wheelhouse=wheelhouse)
     reports = []
     for case in list_cases(source):
         # The sixth fixture demonstrates a deceptively successful public suite.
