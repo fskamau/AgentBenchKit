@@ -1,0 +1,43 @@
+<!doctype html><html lang='en'><head><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'><title>AgentBenchKit evaluation report</title><style>body{font:15px/1.55 system-ui,sans-serif;max-width:1020px;margin:3rem auto;padding:0 1.4rem;color:#24282c;background:#fff}header{border-bottom:2px solid #27364c;padding-bottom:1rem;margin-bottom:1.5rem}h1{font-size:1.8rem}h2{font-size:1.1rem;margin-top:2rem}table{border-collapse:collapse;width:100%}th,td{text-align:left;padding:.65rem;border-bottom:1px solid #ddd;vertical-align:top}th{background:#f1f3f5}code,pre{font:12px/1.55 ui-monospace,monospace}pre{white-space:pre-wrap;overflow-wrap:anywhere;background:#f5f6f8;padding:1rem}li{margin:.55rem 0}small{color:#565b62}details{margin:.6rem 0}@media print{body{margin:1rem}details{display:block}}</style></head><body><main><header><h1>Patch evaluation: deceptive-test-suite</h1><p><strong>Classification:</strong> incomplete_fix</p><small>Engine: local · SHA256: <code>f94bd2ff261cbb21e9469eba14dab77c5aee4005749e15e35c4dc8d3eb213385</code></small></header><h2>Test outcomes</h2><table><thead><tr><th>Stage</th><th>Status</th><th>Failed tests</th></tr></thead><tbody><tr><td>baseline</td><td>passed</td><td>—</td></tr><tr><td>patched</td><td>passed</td><td>—</td></tr><tr><td>oracle</td><td>failed</td><td>test_zero_denominator, test_zero_over_zero</td></tr></tbody></table><h2>Evidence</h2><ul><li>Baseline: passed</li><li>Patched: passed</li><li>Edge-case checklist: test_zero_denominator=failed, test_zero_over_zero=failed</li><li>Independent oracle tests: failed</li><li>Oracle failing tests: test_zero_denominator, test_zero_over_zero</li><li>Passing tests do not constitute proof of semantic correctness.</li></ul><h2>Independent edge-case checklist</h2><ul><li><code>test_zero_denominator</code>: failed</li><li><code>test_zero_over_zero</code>: failed</li></ul><h2>Changed files</h2><ul><li><code>divide.py</code></li></ul><h2>Raw test evidence</h2><details><summary>baseline — exit 0; duration 0.8217s</summary><pre>
+test_basic (test_public.DivisionTests.test_basic) ... ok
+test_negative (test_public.DivisionTests.test_negative) ... ok
+
+----------------------------------------------------------------------
+Ran 2 tests in 0.000s
+
+OK
+</pre></details><details><summary>patched — exit 0; duration 0.8459s</summary><pre>
+test_basic (test_public.DivisionTests.test_basic) ... ok
+test_negative (test_public.DivisionTests.test_negative) ... ok
+
+----------------------------------------------------------------------
+Ran 2 tests in 0.000s
+
+OK
+</pre></details><details><summary>oracle — exit 1; duration 0.8186s</summary><pre>
+test_zero_denominator (test_oracle.DivisionOracle.test_zero_denominator) ... FAIL
+test_zero_over_zero (test_oracle.DivisionOracle.test_zero_over_zero) ... FAIL
+
+======================================================================
+FAIL: test_zero_denominator (test_oracle.DivisionOracle.test_zero_denominator)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File &quot;/tmp/agentbenchkit-001bztcm/candidate/oracle_tests/test_oracle.py&quot;, line 6, in test_zero_denominator
+    with self.assertRaises(ZeroDivisionError):
+         ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+AssertionError: ZeroDivisionError not raised
+
+======================================================================
+FAIL: test_zero_over_zero (test_oracle.DivisionOracle.test_zero_over_zero)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File &quot;/tmp/agentbenchkit-001bztcm/candidate/oracle_tests/test_oracle.py&quot;, line 9, in test_zero_over_zero
+    with self.assertRaises(ZeroDivisionError):
+         ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+AssertionError: ZeroDivisionError not raised
+
+----------------------------------------------------------------------
+Ran 2 tests in 0.001s
+
+FAILED (failures=2)
+</pre></details></main></body></html>

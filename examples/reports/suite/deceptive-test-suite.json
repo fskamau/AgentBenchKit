@@ -1,0 +1,91 @@
+{
+  "case_id": "deceptive-test-suite",
+  "base_commit": "f619e09b47b56d1baed464f1bba39ce2373555a0",
+  "patch_sha256": "f94bd2ff261cbb21e9469eba14dab77c5aee4005749e15e35c4dc8d3eb213385",
+  "changed_files": [
+    "divide.py"
+  ],
+  "unexpected_files": [],
+  "edge_case_results": {
+    "test_zero_denominator": "failed",
+    "test_zero_over_zero": "failed"
+  },
+  "patch_applied": true,
+  "application_error": null,
+  "baseline": {
+    "process": {
+      "argv": [
+        "python",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests",
+        "-v"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": "test_basic (test_public.DivisionTests.test_basic) ... ok\ntest_negative (test_public.DivisionTests.test_negative) ... ok\n\n----------------------------------------------------------------------\nRan 2 tests in 0.000s\n\nOK\n",
+      "duration_seconds": 0.8217,
+      "timed_out": false,
+      "infrastructure_error": null
+    },
+    "classification": "passed",
+    "failed_tests": []
+  },
+  "patched": {
+    "process": {
+      "argv": [
+        "python",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests",
+        "-v"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": "test_basic (test_public.DivisionTests.test_basic) ... ok\ntest_negative (test_public.DivisionTests.test_negative) ... ok\n\n----------------------------------------------------------------------\nRan 2 tests in 0.000s\n\nOK\n",
+      "duration_seconds": 0.8459,
+      "timed_out": false,
+      "infrastructure_error": null
+    },
+    "classification": "passed",
+    "failed_tests": []
+  },
+  "oracle": {
+    "process": {
+      "argv": [
+        "python",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "oracle_tests",
+        "-v"
+      ],
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "test_zero_denominator (test_oracle.DivisionOracle.test_zero_denominator) ... FAIL\ntest_zero_over_zero (test_oracle.DivisionOracle.test_zero_over_zero) ... FAIL\n\n======================================================================\nFAIL: test_zero_denominator (test_oracle.DivisionOracle.test_zero_denominator)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/tmp/agentbenchkit-001bztcm/candidate/oracle_tests/test_oracle.py\", line 6, in test_zero_denominator\n    with self.assertRaises(ZeroDivisionError):\n         ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^\nAssertionError: ZeroDivisionError not raised\n\n======================================================================\nFAIL: test_zero_over_zero (test_oracle.DivisionOracle.test_zero_over_zero)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/tmp/agentbenchkit-001bztcm/candidate/oracle_tests/test_oracle.py\", line 9, in test_zero_over_zero\n    with self.assertRaises(ZeroDivisionError):\n         ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^\nAssertionError: ZeroDivisionError not raised\n\n----------------------------------------------------------------------\nRan 2 tests in 0.001s\n\nFAILED (failures=2)\n",
+      "duration_seconds": 0.8186,
+      "timed_out": false,
+      "infrastructure_error": null
+    },
+    "classification": "failed",
+    "failed_tests": [
+      "test_zero_denominator",
+      "test_zero_over_zero"
+    ]
+  },
+  "classification": "incomplete_fix",
+  "evidence": [
+    "Baseline: passed",
+    "Patched: passed",
+    "Edge-case checklist: test_zero_denominator=failed, test_zero_over_zero=failed",
+    "Independent oracle tests: failed",
+    "Oracle failing tests: test_zero_denominator, test_zero_over_zero",
+    "Passing tests do not constitute proof of semantic correctness."
+  ],
+  "engine": "local"
+}

@@ -1,0 +1,31 @@
+{
+  "schema_version": "1.0",
+  "task_id": "pagination-off-by-one",
+  "total_score": 100.0,
+  "dimension_scores": {
+    "selection": 100.0,
+    "arguments": 100.0,
+    "sequencing": 100.0,
+    "interpretation": 100.0,
+    "recovery": 100.0,
+    "efficiency": 100.0,
+    "safety": 100.0,
+    "contribution": null
+  },
+  "findings": [
+    {
+      "dimension": "contribution",
+      "severity": "review",
+      "message": "Task correctness requires independently verified outputs/tests, not tool names or exit codes.",
+      "evidence_ids": [
+        "e3"
+      ],
+      "deduction": 0.0,
+      "category": "uncertain"
+    }
+  ],
+  "review_required": [
+    "contribution"
+  ],
+  "evidence_count": 3
+}

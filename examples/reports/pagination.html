@@ -1,0 +1,32 @@
+<!doctype html><html lang='en'><head><meta charset='utf-8'><meta name='viewport' content='width=device-width'><title>AgentBenchKit evaluation</title><style>body{font:15px/1.6 system-ui;margin:2rem auto;max-width:950px;padding:0 1.5rem;color:#232323}pre{white-space:pre-wrap;overflow-wrap:anywhere;background:#f4f4f4;padding:1.5rem;border-radius:5px}</style></head><body><main><pre># Patch evaluation: pagination-boundary
+
+**Classification:** verified_by_tests
+
+**Engine:** local
+
+**Patch SHA-256:** `9a26fe4b7bf8678fb0addfec0a6bb948e307d1474373b568ec8b592efbc823f7`
+
+## Tests
+
+- **baseline**: failed
+- **patched**: passed
+- **oracle**: passed
+
+## Evidence
+
+- Baseline: failed
+- Patched: passed
+- Edge-case checklist: test_small=passed, test_invalid_size=passed, test_negative_count=passed
+- Independent oracle tests: passed
+- Passing tests do not constitute proof of semantic correctness.
+
+## Edge-case checklist
+
+- test_small: passed
+- test_invalid_size: passed
+- test_negative_count: passed
+
+## Modified files
+
+- `pager.py`
+</pre></main></body></html>

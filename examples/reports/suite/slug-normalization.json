@@ -1,0 +1,91 @@
+{
+  "case_id": "slug-normalization",
+  "base_commit": "f619e09b47b56d1baed464f1bba39ce2373555a0",
+  "patch_sha256": "436f038ed2023087ae38fb655b76eff1fb9459f2a48a31c9f67dc90f76f9038b",
+  "changed_files": [
+    "slug.py"
+  ],
+  "unexpected_files": [],
+  "edge_case_results": {
+    "test_punctuation": "passed",
+    "test_symbols": "passed",
+    "test_empty": "passed"
+  },
+  "patch_applied": true,
+  "application_error": null,
+  "baseline": {
+    "process": {
+      "argv": [
+        "python",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests",
+        "-v"
+      ],
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "test_plain (test_public.SlugTests.test_plain) ... ok\ntest_tab (test_public.SlugTests.test_tab) ... FAIL\ntest_whitespace (test_public.SlugTests.test_whitespace) ... FAIL\n\n======================================================================\nFAIL: test_tab (test_public.SlugTests.test_tab)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/tmp/agentbenchkit-b7pk4u6j/baseline/tests/test_public.py\", line 8, in test_tab\n    self.assertEqual(slugify(\"alpha\\tbeta\"), \"alpha-beta\")\n    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: 'alpha\\tbeta' != 'alpha-beta'\n- alpha\tbeta\n?      ^\n+ alpha-beta\n?      ^\n\n\n======================================================================\nFAIL: test_whitespace (test_public.SlugTests.test_whitespace)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/tmp/agentbenchkit-b7pk4u6j/baseline/tests/test_public.py\", line 6, in test_whitespace\n    self.assertEqual(slugify(\"Hello   WORLD\"), \"hello-world\")\n    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: 'hello---world' != 'hello-world'\n- hello---world\n?      --\n+ hello-world\n\n\n----------------------------------------------------------------------\nRan 3 tests in 0.001s\n\nFAILED (failures=2)\n",
+      "duration_seconds": 0.6301,
+      "timed_out": false,
+      "infrastructure_error": null
+    },
+    "classification": "failed",
+    "failed_tests": [
+      "test_tab",
+      "test_whitespace"
+    ]
+  },
+  "patched": {
+    "process": {
+      "argv": [
+        "python",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests",
+        "-v"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": "test_plain (test_public.SlugTests.test_plain) ... ok\ntest_tab (test_public.SlugTests.test_tab) ... ok\ntest_whitespace (test_public.SlugTests.test_whitespace) ... ok\n\n----------------------------------------------------------------------\nRan 3 tests in 0.000s\n\nOK\n",
+      "duration_seconds": 0.7646,
+      "timed_out": false,
+      "infrastructure_error": null
+    },
+    "classification": "passed",
+    "failed_tests": []
+  },
+  "oracle": {
+    "process": {
+      "argv": [
+        "python",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "oracle_tests",
+        "-v"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": "test_empty (test_oracle.SlugOracle.test_empty) ... ok\ntest_punctuation (test_oracle.SlugOracle.test_punctuation) ... ok\ntest_symbols (test_oracle.SlugOracle.test_symbols) ... ok\n\n----------------------------------------------------------------------\nRan 3 tests in 0.000s\n\nOK\n",
+      "duration_seconds": 0.7675,
+      "timed_out": false,
+      "infrastructure_error": null
+    },
+    "classification": "passed",
+    "failed_tests": []
+  },
+  "classification": "verified_by_tests",
+  "evidence": [
+    "Baseline: failed",
+    "Patched: passed",
+    "Edge-case checklist: test_punctuation=passed, test_symbols=passed, test_empty=passed",
+    "Independent oracle tests: passed",
+    "Passing tests do not constitute proof of semantic correctness."
+  ],
+  "engine": "local"
+}

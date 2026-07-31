@@ -1,0 +1,92 @@
+{
+  "case_id": "retry-backoff",
+  "base_commit": "f619e09b47b56d1baed464f1bba39ce2373555a0",
+  "patch_sha256": "c8072570eec285f5a3d5e89743607bfb25122a485d77bf6f6006ed2575e6a1db",
+  "changed_files": [
+    "retry.py"
+  ],
+  "unexpected_files": [],
+  "edge_case_results": {
+    "test_zero_attempts": "passed",
+    "test_invalid_base": "passed",
+    "test_invalid_attempts": "passed"
+  },
+  "patch_applied": true,
+  "application_error": null,
+  "baseline": {
+    "process": {
+      "argv": [
+        "python",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests",
+        "-v"
+      ],
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "test_cap (test_public.RetryTests.test_cap) ... FAIL\ntest_count (test_public.RetryTests.test_count) ... FAIL\ntest_one_attempt (test_public.RetryTests.test_one_attempt) ... FAIL\n\n======================================================================\nFAIL: test_cap (test_public.RetryTests.test_cap)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/tmp/agentbenchkit-hwxwilsi/baseline/tests/test_public.py\", line 8, in test_cap\n    self.assertEqual(retry_delays(5,4,8), [4,8,8,8])\n    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: Lists differ: [4, 8, 8, 8, 8] != [4, 8, 8, 8]\n\nFirst list contains 1 additional elements.\nFirst extra element 4:\n8\n\n- [4, 8, 8, 8, 8]\n?           ---\n\n+ [4, 8, 8, 8]\n\n======================================================================\nFAIL: test_count (test_public.RetryTests.test_count)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/tmp/agentbenchkit-hwxwilsi/baseline/tests/test_public.py\", line 6, in test_count\n    self.assertEqual(retry_delays(4), [1.0,2.0,4.0])\n    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: Lists differ: [1.0, 2.0, 4.0, 8.0] != [1.0, 2.0, 4.0]\n\nFirst list contains 1 additional elements.\nFirst extra element 3:\n8.0\n\n- [1.0, 2.0, 4.0, 8.0]\n?               -----\n\n+ [1.0, 2.0, 4.0]\n\n======================================================================\nFAIL: test_one_attempt (test_public.RetryTests.test_one_attempt)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/tmp/agentbenchkit-hwxwilsi/baseline/tests/test_public.py\", line 10, in test_one_attempt\n    self.assertEqual(retry_delays(1), [])\n    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^\nAssertionError: Lists differ: [1.0] != []\n\nFirst list contains 1 additional elements.\nFirst extra element 0:\n1.0\n\n- [1.0]\n+ []\n\n----------------------------------------------------------------------\nRan 3 tests in 0.001s\n\nFAILED (failures=3)\n",
+      "duration_seconds": 0.6849,
+      "timed_out": false,
+      "infrastructure_error": null
+    },
+    "classification": "failed",
+    "failed_tests": [
+      "test_cap",
+      "test_count",
+      "test_one_attempt"
+    ]
+  },
+  "patched": {
+    "process": {
+      "argv": [
+        "python",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests",
+        "-v"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": "test_cap (test_public.RetryTests.test_cap) ... ok\ntest_count (test_public.RetryTests.test_count) ... ok\ntest_one_attempt (test_public.RetryTests.test_one_attempt) ... ok\n\n----------------------------------------------------------------------\nRan 3 tests in 0.000s\n\nOK\n",
+      "duration_seconds": 0.6189,
+      "timed_out": false,
+      "infrastructure_error": null
+    },
+    "classification": "passed",
+    "failed_tests": []
+  },
+  "oracle": {
+    "process": {
+      "argv": [
+        "python",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "oracle_tests",
+        "-v"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": "test_invalid_attempts (test_oracle.RetryOracle.test_invalid_attempts) ... ok\ntest_invalid_base (test_oracle.RetryOracle.test_invalid_base) ... ok\ntest_zero_attempts (test_oracle.RetryOracle.test_zero_attempts) ... ok\n\n----------------------------------------------------------------------\nRan 3 tests in 0.000s\n\nOK\n",
+      "duration_seconds": 0.6486,
+      "timed_out": false,
+      "infrastructure_error": null
+    },
+    "classification": "passed",
+    "failed_tests": []
+  },
+  "classification": "verified_by_tests",
+  "evidence": [
+    "Baseline: failed",
+    "Patched: passed",
+    "Edge-case checklist: test_zero_attempts=passed, test_invalid_base=passed, test_invalid_attempts=passed",
+    "Independent oracle tests: passed",
+    "Passing tests do not constitute proof of semantic correctness."
+  ],
+  "engine": "local"
+}

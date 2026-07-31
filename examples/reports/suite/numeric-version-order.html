@@ -1,0 +1,41 @@
+<!doctype html><html lang='en'><head><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'><title>AgentBenchKit evaluation report</title><style>body{font:15px/1.55 system-ui,sans-serif;max-width:1020px;margin:3rem auto;padding:0 1.4rem;color:#24282c;background:#fff}header{border-bottom:2px solid #27364c;padding-bottom:1rem;margin-bottom:1.5rem}h1{font-size:1.8rem}h2{font-size:1.1rem;margin-top:2rem}table{border-collapse:collapse;width:100%}th,td{text-align:left;padding:.65rem;border-bottom:1px solid #ddd;vertical-align:top}th{background:#f1f3f5}code,pre{font:12px/1.55 ui-monospace,monospace}pre{white-space:pre-wrap;overflow-wrap:anywhere;background:#f5f6f8;padding:1rem}li{margin:.55rem 0}small{color:#565b62}details{margin:.6rem 0}@media print{body{margin:1rem}details{display:block}}</style></head><body><main><header><h1>Patch evaluation: numeric-version-order</h1><p><strong>Classification:</strong> verified_by_tests</p><small>Engine: local · SHA256: <code>68ea9a7a664be982a12ded115ad2fdb82b824c5e435e6e5ce6d5eb5061df70cb</code></small></header><h2>Test outcomes</h2><table><thead><tr><th>Stage</th><th>Status</th><th>Failed tests</th></tr></thead><tbody><tr><td>baseline</td><td>failed</td><td>test_double_digits</td></tr><tr><td>patched</td><td>passed</td><td>—</td></tr><tr><td>oracle</td><td>passed</td><td>—</td></tr></tbody></table><h2>Evidence</h2><ul><li>Baseline: failed</li><li>Patched: passed</li><li>Edge-case checklist: test_patch_component=passed, test_bad_version=passed</li><li>Independent oracle tests: passed</li><li>Passing tests do not constitute proof of semantic correctness.</li></ul><h2>Independent edge-case checklist</h2><ul><li><code>test_patch_component</code>: passed</li><li><code>test_bad_version</code>: passed</li></ul><h2>Changed files</h2><ul><li><code>versions.py</code></li></ul><h2>Raw test evidence</h2><details><summary>baseline — exit 1; duration 0.8314s</summary><pre>
+test_double_digits (test_public.VersionTests.test_double_digits) ... FAIL
+test_major (test_public.VersionTests.test_major) ... ok
+
+======================================================================
+FAIL: test_double_digits (test_public.VersionTests.test_double_digits)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File &quot;/tmp/agentbenchkit-lh2corwn/baseline/tests/test_public.py&quot;, line 6, in test_double_digits
+    self.assertEqual(sort_versions([&quot;1.10.0&quot;,&quot;1.2.0&quot;]), [&quot;1.2.0&quot;,&quot;1.10.0&quot;])
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Lists differ: [&#x27;1.10.0&#x27;, &#x27;1.2.0&#x27;] != [&#x27;1.2.0&#x27;, &#x27;1.10.0&#x27;]
+
+First differing element 0:
+&#x27;1.10.0&#x27;
+&#x27;1.2.0&#x27;
+
+- [&#x27;1.10.0&#x27;, &#x27;1.2.0&#x27;]
++ [&#x27;1.2.0&#x27;, &#x27;1.10.0&#x27;]
+
+----------------------------------------------------------------------
+Ran 2 tests in 0.001s
+
+FAILED (failures=1)
+</pre></details><details><summary>patched — exit 0; duration 0.7653s</summary><pre>
+test_double_digits (test_public.VersionTests.test_double_digits) ... ok
+test_major (test_public.VersionTests.test_major) ... ok
+
+----------------------------------------------------------------------
+Ran 2 tests in 0.000s
+
+OK
+</pre></details><details><summary>oracle — exit 0; duration 0.6743s</summary><pre>
+test_bad_version (test_oracle.VersionOracle.test_bad_version) ... ok
+test_patch_component (test_oracle.VersionOracle.test_patch_component) ... ok
+
+----------------------------------------------------------------------
+Ran 2 tests in 0.000s
+
+OK
+</pre></details></main></body></html>

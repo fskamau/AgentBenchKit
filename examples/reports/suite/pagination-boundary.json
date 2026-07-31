@@ -1,0 +1,90 @@
+{
+  "case_id": "pagination-boundary",
+  "base_commit": "f619e09b47b56d1baed464f1bba39ce2373555a0",
+  "patch_sha256": "9a26fe4b7bf8678fb0addfec0a6bb948e307d1474373b568ec8b592efbc823f7",
+  "changed_files": [
+    "pager.py"
+  ],
+  "unexpected_files": [],
+  "edge_case_results": {
+    "test_small": "passed",
+    "test_invalid_size": "passed",
+    "test_negative_count": "passed"
+  },
+  "patch_applied": true,
+  "application_error": null,
+  "baseline": {
+    "process": {
+      "argv": [
+        "python",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests",
+        "-v"
+      ],
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "test_empty (test_public.PaginationTests.test_empty) ... ok\ntest_even (test_public.PaginationTests.test_even) ... ok\ntest_remainder (test_public.PaginationTests.test_remainder) ... FAIL\n\n======================================================================\nFAIL: test_remainder (test_public.PaginationTests.test_remainder)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/tmp/agentbenchkit-r5j7_zua/baseline/tests/test_public.py\", line 6, in test_remainder\n    self.assertEqual(page_count(11, 5), 3)\n    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: 2 != 3\n\n----------------------------------------------------------------------\nRan 3 tests in 0.000s\n\nFAILED (failures=1)\n",
+      "duration_seconds": 0.6603,
+      "timed_out": false,
+      "infrastructure_error": null
+    },
+    "classification": "failed",
+    "failed_tests": [
+      "test_remainder"
+    ]
+  },
+  "patched": {
+    "process": {
+      "argv": [
+        "python",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests",
+        "-v"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": "test_empty (test_public.PaginationTests.test_empty) ... ok\ntest_even (test_public.PaginationTests.test_even) ... ok\ntest_remainder (test_public.PaginationTests.test_remainder) ... ok\n\n----------------------------------------------------------------------\nRan 3 tests in 0.000s\n\nOK\n",
+      "duration_seconds": 0.7049,
+      "timed_out": false,
+      "infrastructure_error": null
+    },
+    "classification": "passed",
+    "failed_tests": []
+  },
+  "oracle": {
+    "process": {
+      "argv": [
+        "python",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "oracle_tests",
+        "-v"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": "test_invalid_size (test_oracle.PaginationOracle.test_invalid_size) ... ok\ntest_negative_count (test_oracle.PaginationOracle.test_negative_count) ... ok\ntest_small (test_oracle.PaginationOracle.test_small) ... ok\n\n----------------------------------------------------------------------\nRan 3 tests in 0.000s\n\nOK\n",
+      "duration_seconds": 0.6812,
+      "timed_out": false,
+      "infrastructure_error": null
+    },
+    "classification": "passed",
+    "failed_tests": []
+  },
+  "classification": "verified_by_tests",
+  "evidence": [
+    "Baseline: failed",
+    "Patched: passed",
+    "Edge-case checklist: test_small=passed, test_invalid_size=passed, test_negative_count=passed",
+    "Independent oracle tests: passed",
+    "Passing tests do not constitute proof of semantic correctness."
+  ],
+  "engine": "local"
+}

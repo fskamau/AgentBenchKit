@@ -1,0 +1,40 @@
+<!doctype html><html lang='en'><head><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'><title>AgentBenchKit evaluation report</title><style>body{font:15px/1.55 system-ui,sans-serif;max-width:1020px;margin:3rem auto;padding:0 1.4rem;color:#24282c;background:#fff}header{border-bottom:2px solid #27364c;padding-bottom:1rem;margin-bottom:1.5rem}h1{font-size:1.8rem}h2{font-size:1.1rem;margin-top:2rem}table{border-collapse:collapse;width:100%}th,td{text-align:left;padding:.65rem;border-bottom:1px solid #ddd;vertical-align:top}th{background:#f1f3f5}code,pre{font:12px/1.55 ui-monospace,monospace}pre{white-space:pre-wrap;overflow-wrap:anywhere;background:#f5f6f8;padding:1rem}li{margin:.55rem 0}small{color:#565b62}details{margin:.6rem 0}@media print{body{margin:1rem}details{display:block}}</style></head><body><main><header><h1>Patch evaluation: nested-config-merge</h1><p><strong>Classification:</strong> verified_by_tests</p><small>Engine: local · SHA256: <code>31d7e622fad122a7c0d8644e124a436b090b3b61f12d0715536adeb7167c6eed</code></small></header><h2>Test outcomes</h2><table><thead><tr><th>Stage</th><th>Status</th><th>Failed tests</th></tr></thead><tbody><tr><td>baseline</td><td>failed</td><td>test_nested_preserved</td></tr><tr><td>patched</td><td>passed</td><td>—</td></tr><tr><td>oracle</td><td>passed</td><td>—</td></tr></tbody></table><h2>Evidence</h2><ul><li>Baseline: failed</li><li>Patched: passed</li><li>Edge-case checklist: test_recursive_third_level=passed, test_does_not_mutate_inputs=passed</li><li>Independent oracle tests: passed</li><li>Passing tests do not constitute proof of semantic correctness.</li></ul><h2>Independent edge-case checklist</h2><ul><li><code>test_recursive_third_level</code>: passed</li><li><code>test_does_not_mutate_inputs</code>: passed</li></ul><h2>Changed files</h2><ul><li><code>merge.py</code></li></ul><h2>Raw test evidence</h2><details><summary>baseline — exit 1; duration 0.8654s</summary><pre>
+test_nested_preserved (test_public.ConfigTests.test_nested_preserved) ... FAIL
+test_simple_override (test_public.ConfigTests.test_simple_override) ... ok
+
+======================================================================
+FAIL: test_nested_preserved (test_public.ConfigTests.test_nested_preserved)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File &quot;/tmp/agentbenchkit-7i_n0b_k/baseline/tests/test_public.py&quot;, line 6, in test_nested_preserved
+    self.assertEqual(merge_config({&quot;db&quot;:{&quot;host&quot;:&quot;localhost&quot;,&quot;port&quot;:5432}},
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                                  {&quot;db&quot;:{&quot;port&quot;:5433}}),
+                                  ^^^^^^^^^^^^^^^^^^^^^^
+                     {&quot;db&quot;:{&quot;host&quot;:&quot;localhost&quot;,&quot;port&quot;:5433}})
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: {&#x27;db&#x27;: {&#x27;port&#x27;: 5433}} != {&#x27;db&#x27;: {&#x27;host&#x27;: &#x27;localhost&#x27;, &#x27;port&#x27;: 5433}}
+- {&#x27;db&#x27;: {&#x27;port&#x27;: 5433}}
++ {&#x27;db&#x27;: {&#x27;host&#x27;: &#x27;localhost&#x27;, &#x27;port&#x27;: 5433}}
+
+----------------------------------------------------------------------
+Ran 2 tests in 0.001s
+
+FAILED (failures=1)
+</pre></details><details><summary>patched — exit 0; duration 0.7386s</summary><pre>
+test_nested_preserved (test_public.ConfigTests.test_nested_preserved) ... ok
+test_simple_override (test_public.ConfigTests.test_simple_override) ... ok
+
+----------------------------------------------------------------------
+Ran 2 tests in 0.000s
+
+OK
+</pre></details><details><summary>oracle — exit 0; duration 0.844s</summary><pre>
+test_does_not_mutate_inputs (test_oracle.ConfigOracle.test_does_not_mutate_inputs) ... ok
+test_recursive_third_level (test_oracle.ConfigOracle.test_recursive_third_level) ... ok
+
+----------------------------------------------------------------------
+Ran 2 tests in 0.000s
+
+OK
+</pre></details></main></body></html>

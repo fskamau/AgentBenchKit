@@ -1,0 +1,89 @@
+{
+  "case_id": "numeric-version-order",
+  "base_commit": "f619e09b47b56d1baed464f1bba39ce2373555a0",
+  "patch_sha256": "68ea9a7a664be982a12ded115ad2fdb82b824c5e435e6e5ce6d5eb5061df70cb",
+  "changed_files": [
+    "versions.py"
+  ],
+  "unexpected_files": [],
+  "edge_case_results": {
+    "test_patch_component": "passed",
+    "test_bad_version": "passed"
+  },
+  "patch_applied": true,
+  "application_error": null,
+  "baseline": {
+    "process": {
+      "argv": [
+        "python",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests",
+        "-v"
+      ],
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "test_double_digits (test_public.VersionTests.test_double_digits) ... FAIL\ntest_major (test_public.VersionTests.test_major) ... ok\n\n======================================================================\nFAIL: test_double_digits (test_public.VersionTests.test_double_digits)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/tmp/agentbenchkit-lh2corwn/baseline/tests/test_public.py\", line 6, in test_double_digits\n    self.assertEqual(sort_versions([\"1.10.0\",\"1.2.0\"]), [\"1.2.0\",\"1.10.0\"])\n    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: Lists differ: ['1.10.0', '1.2.0'] != ['1.2.0', '1.10.0']\n\nFirst differing element 0:\n'1.10.0'\n'1.2.0'\n\n- ['1.10.0', '1.2.0']\n+ ['1.2.0', '1.10.0']\n\n----------------------------------------------------------------------\nRan 2 tests in 0.001s\n\nFAILED (failures=1)\n",
+      "duration_seconds": 0.8314,
+      "timed_out": false,
+      "infrastructure_error": null
+    },
+    "classification": "failed",
+    "failed_tests": [
+      "test_double_digits"
+    ]
+  },
+  "patched": {
+    "process": {
+      "argv": [
+        "python",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests",
+        "-v"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": "test_double_digits (test_public.VersionTests.test_double_digits) ... ok\ntest_major (test_public.VersionTests.test_major) ... ok\n\n----------------------------------------------------------------------\nRan 2 tests in 0.000s\n\nOK\n",
+      "duration_seconds": 0.7653,
+      "timed_out": false,
+      "infrastructure_error": null
+    },
+    "classification": "passed",
+    "failed_tests": []
+  },
+  "oracle": {
+    "process": {
+      "argv": [
+        "python",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "oracle_tests",
+        "-v"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": "test_bad_version (test_oracle.VersionOracle.test_bad_version) ... ok\ntest_patch_component (test_oracle.VersionOracle.test_patch_component) ... ok\n\n----------------------------------------------------------------------\nRan 2 tests in 0.000s\n\nOK\n",
+      "duration_seconds": 0.6743,
+      "timed_out": false,
+      "infrastructure_error": null
+    },
+    "classification": "passed",
+    "failed_tests": []
+  },
+  "classification": "verified_by_tests",
+  "evidence": [
+    "Baseline: failed",
+    "Patched: passed",
+    "Edge-case checklist: test_patch_component=passed, test_bad_version=passed",
+    "Independent oracle tests: passed",
+    "Passing tests do not constitute proof of semantic correctness."
+  ],
+  "engine": "local"
+}

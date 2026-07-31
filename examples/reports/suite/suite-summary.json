@@ -1,0 +1,52 @@
+{
+  "total_cases": 6,
+  "classification_counts": {
+    "incomplete_fix": 1,
+    "verified_by_tests": 5
+  },
+  "cases": [
+    {
+      "id": "deceptive-test-suite",
+      "classification": "incomplete_fix",
+      "baseline": "passed",
+      "patched": "passed",
+      "oracle": "failed"
+    },
+    {
+      "id": "nested-config-merge",
+      "classification": "verified_by_tests",
+      "baseline": "failed",
+      "patched": "passed",
+      "oracle": "passed"
+    },
+    {
+      "id": "numeric-version-order",
+      "classification": "verified_by_tests",
+      "baseline": "failed",
+      "patched": "passed",
+      "oracle": "passed"
+    },
+    {
+      "id": "pagination-boundary",
+      "classification": "verified_by_tests",
+      "baseline": "failed",
+      "patched": "passed",
+      "oracle": "passed"
+    },
+    {
+      "id": "retry-backoff",
+      "classification": "verified_by_tests",
+      "baseline": "failed",
+      "patched": "passed",
+      "oracle": "passed"
+    },
+    {
+      "id": "slug-normalization",
+      "classification": "verified_by_tests",
+      "baseline": "failed",
+      "patched": "passed",
+      "oracle": "passed"
+    }
+  ],
+  "warning": "The benchmark suite is synthetic; do not extrapolate to real agent quality."
+}

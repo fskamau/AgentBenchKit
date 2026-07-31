@@ -1,0 +1,37 @@
+<!doctype html><html lang='en'><head><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'><title>AgentBenchKit evaluation report</title><style>body{font:15px/1.55 system-ui,sans-serif;max-width:1020px;margin:3rem auto;padding:0 1.4rem;color:#24282c;background:#fff}header{border-bottom:2px solid #27364c;padding-bottom:1rem;margin-bottom:1.5rem}h1{font-size:1.8rem}h2{font-size:1.1rem;margin-top:2rem}table{border-collapse:collapse;width:100%}th,td{text-align:left;padding:.65rem;border-bottom:1px solid #ddd;vertical-align:top}th{background:#f1f3f5}code,pre{font:12px/1.55 ui-monospace,monospace}pre{white-space:pre-wrap;overflow-wrap:anywhere;background:#f5f6f8;padding:1rem}li{margin:.55rem 0}small{color:#565b62}details{margin:.6rem 0}@media print{body{margin:1rem}details{display:block}}</style></head><body><main><header><h1>Patch evaluation: pagination-boundary</h1><p><strong>Classification:</strong> verified_by_tests</p><small>Engine: local · SHA256: <code>9a26fe4b7bf8678fb0addfec0a6bb948e307d1474373b568ec8b592efbc823f7</code></small></header><h2>Test outcomes</h2><table><thead><tr><th>Stage</th><th>Status</th><th>Failed tests</th></tr></thead><tbody><tr><td>baseline</td><td>failed</td><td>test_remainder</td></tr><tr><td>patched</td><td>passed</td><td>—</td></tr><tr><td>oracle</td><td>passed</td><td>—</td></tr></tbody></table><h2>Evidence</h2><ul><li>Baseline: failed</li><li>Patched: passed</li><li>Edge-case checklist: test_small=passed, test_invalid_size=passed, test_negative_count=passed</li><li>Independent oracle tests: passed</li><li>Passing tests do not constitute proof of semantic correctness.</li></ul><h2>Independent edge-case checklist</h2><ul><li><code>test_small</code>: passed</li><li><code>test_invalid_size</code>: passed</li><li><code>test_negative_count</code>: passed</li></ul><h2>Changed files</h2><ul><li><code>pager.py</code></li></ul><h2>Raw test evidence</h2><details><summary>baseline — exit 1; duration 0.6603s</summary><pre>
+test_empty (test_public.PaginationTests.test_empty) ... ok
+test_even (test_public.PaginationTests.test_even) ... ok
+test_remainder (test_public.PaginationTests.test_remainder) ... FAIL
+
+======================================================================
+FAIL: test_remainder (test_public.PaginationTests.test_remainder)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File &quot;/tmp/agentbenchkit-r5j7_zua/baseline/tests/test_public.py&quot;, line 6, in test_remainder
+    self.assertEqual(page_count(11, 5), 3)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 2 != 3
+
+----------------------------------------------------------------------
+Ran 3 tests in 0.000s
+
+FAILED (failures=1)
+</pre></details><details><summary>patched — exit 0; duration 0.7049s</summary><pre>
+test_empty (test_public.PaginationTests.test_empty) ... ok
+test_even (test_public.PaginationTests.test_even) ... ok
+test_remainder (test_public.PaginationTests.test_remainder) ... ok
+
+----------------------------------------------------------------------
+Ran 3 tests in 0.000s
+
+OK
+</pre></details><details><summary>oracle — exit 0; duration 0.6812s</summary><pre>
+test_invalid_size (test_oracle.PaginationOracle.test_invalid_size) ... ok
+test_negative_count (test_oracle.PaginationOracle.test_negative_count) ... ok
+test_small (test_oracle.PaginationOracle.test_small) ... ok
+
+----------------------------------------------------------------------
+Ran 3 tests in 0.000s
+
+OK
+</pre></details></main></body></html>

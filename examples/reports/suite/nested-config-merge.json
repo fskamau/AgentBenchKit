@@ -1,0 +1,89 @@
+{
+  "case_id": "nested-config-merge",
+  "base_commit": "f619e09b47b56d1baed464f1bba39ce2373555a0",
+  "patch_sha256": "31d7e622fad122a7c0d8644e124a436b090b3b61f12d0715536adeb7167c6eed",
+  "changed_files": [
+    "merge.py"
+  ],
+  "unexpected_files": [],
+  "edge_case_results": {
+    "test_recursive_third_level": "passed",
+    "test_does_not_mutate_inputs": "passed"
+  },
+  "patch_applied": true,
+  "application_error": null,
+  "baseline": {
+    "process": {
+      "argv": [
+        "python",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests",
+        "-v"
+      ],
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "test_nested_preserved (test_public.ConfigTests.test_nested_preserved) ... FAIL\ntest_simple_override (test_public.ConfigTests.test_simple_override) ... ok\n\n======================================================================\nFAIL: test_nested_preserved (test_public.ConfigTests.test_nested_preserved)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/tmp/agentbenchkit-7i_n0b_k/baseline/tests/test_public.py\", line 6, in test_nested_preserved\n    self.assertEqual(merge_config({\"db\":{\"host\":\"localhost\",\"port\":5432}},\n    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n                                  {\"db\":{\"port\":5433}}),\n                                  ^^^^^^^^^^^^^^^^^^^^^^\n                     {\"db\":{\"host\":\"localhost\",\"port\":5433}})\n                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: {'db': {'port': 5433}} != {'db': {'host': 'localhost', 'port': 5433}}\n- {'db': {'port': 5433}}\n+ {'db': {'host': 'localhost', 'port': 5433}}\n\n----------------------------------------------------------------------\nRan 2 tests in 0.001s\n\nFAILED (failures=1)\n",
+      "duration_seconds": 0.8654,
+      "timed_out": false,
+      "infrastructure_error": null
+    },
+    "classification": "failed",
+    "failed_tests": [
+      "test_nested_preserved"
+    ]
+  },
+  "patched": {
+    "process": {
+      "argv": [
+        "python",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests",
+        "-v"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": "test_nested_preserved (test_public.ConfigTests.test_nested_preserved) ... ok\ntest_simple_override (test_public.ConfigTests.test_simple_override) ... ok\n\n----------------------------------------------------------------------\nRan 2 tests in 0.000s\n\nOK\n",
+      "duration_seconds": 0.7386,
+      "timed_out": false,
+      "infrastructure_error": null
+    },
+    "classification": "passed",
+    "failed_tests": []
+  },
+  "oracle": {
+    "process": {
+      "argv": [
+        "python",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "oracle_tests",
+        "-v"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": "test_does_not_mutate_inputs (test_oracle.ConfigOracle.test_does_not_mutate_inputs) ... ok\ntest_recursive_third_level (test_oracle.ConfigOracle.test_recursive_third_level) ... ok\n\n----------------------------------------------------------------------\nRan 2 tests in 0.000s\n\nOK\n",
+      "duration_seconds": 0.844,
+      "timed_out": false,
+      "infrastructure_error": null
+    },
+    "classification": "passed",
+    "failed_tests": []
+  },
+  "classification": "verified_by_tests",
+  "evidence": [
+    "Baseline: failed",
+    "Patched: passed",
+    "Edge-case checklist: test_recursive_third_level=passed, test_does_not_mutate_inputs=passed",
+    "Independent oracle tests: passed",
+    "Passing tests do not constitute proof of semantic correctness."
+  ],
+  "engine": "local"
+}
