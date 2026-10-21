@@ -1,5 +1,3 @@
-from pathlib import Path
-
 import pytest
 
 from agentbenchkit.exceptions import BenchKitError
@@ -14,7 +12,9 @@ def test_missing_docker_fails_cleanly(monkeypatch):
 
 
 def test_flags_enforce_resource_policy(monkeypatch, tmp_path):
-    monkeypatch.setattr(docker_module.shutil, "which", lambda _: "/usr/bin/docker")
+    monkeypatch.setattr(
+        docker_module.shutil, "which", lambda _: "/usr/bin/docker"
+    )
     runner = docker_module.DockerRunner()
     argv = runner._argv(["python", "--version"], tmp_path, "abk-test")
     assert "--network=none" in argv
@@ -27,13 +27,22 @@ def test_flags_enforce_resource_policy(monkeypatch, tmp_path):
 
 
 def test_cleanup_attempted_even_after_timeout(monkeypatch, tmp_path):
-    monkeypatch.setattr(docker_module.shutil, "which", lambda _: "/usr/bin/docker")
+    monkeypatch.setattr(
+        docker_module.shutil, "which", lambda _: "/usr/bin/docker"
+    )
     calls = []
+
     def fake_execute(argv, cwd, timeout):
         calls.append(argv)
-        return ProcessResult(argv=argv, exit_code=None if "run" in argv else 0,
-                             stdout="", stderr="", timed_out="run" in argv,
-                             duration_seconds=0.01)
+        return ProcessResult(
+            argv=argv,
+            exit_code=None if "run" in argv else 0,
+            stdout="",
+            stderr="",
+            timed_out="run" in argv,
+            duration_seconds=0.01,
+        )
+
     monkeypatch.setattr(docker_module, "execute", fake_execute)
     docker_module.DockerRunner().run(["python", "--version"], tmp_path, 1)
     assert any(argv[0:3] == ["docker", "rm", "-f"] for argv in calls)
@@ -41,5 +50,8 @@ def test_cleanup_attempted_even_after_timeout(monkeypatch, tmp_path):
 
 def test_status_reports_missing_binary(monkeypatch):
     monkeypatch.setattr(docker_module.shutil, "which", lambda _: None)
-    assert docker_module.docker_status() == {"binary": False, "daemon": False,
-                                               "image_cached": False}
+    assert docker_module.docker_status() == {
+        "binary": False,
+        "daemon": False,
+        "image_cached": False,
+    }

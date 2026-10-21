@@ -40,10 +40,21 @@ def test_mutation_summary(tmp_path):
 
 
 def _example_evaluation():
-    trajectory = parse_trajectory({"task_id": "demo", "events": [
-        {"id":"1","sequence":1,"timestamp":"2026-10-21T00:00:00Z",
-         "tool":"terminal","arguments":{"command":"echo <script>alert(1)</script>"},
-         "result":{"status":"success","exit_code":0}}]})
+    trajectory = parse_trajectory(
+        {
+            "task_id": "demo",
+            "events": [
+                {
+                    "id": "1",
+                    "sequence": 1,
+                    "timestamp": "2026-10-21T00:00:00Z",
+                    "tool": "terminal",
+                    "arguments": {"command": "echo <script>alert(1)</script>"},
+                    "result": {"status": "success", "exit_code": 0},
+                }
+            ],
+        }
+    )
     return evaluate(trajectory)
 
 

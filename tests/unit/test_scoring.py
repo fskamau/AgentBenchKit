@@ -9,16 +9,31 @@ from agentbenchkit.trajectory.parser import parse_trajectory
 
 
 def make(*events):
-    return parse_trajectory({"task_id": "demo", "events": [
-        {"id": f"e{i}", "sequence": i, "timestamp": f"2026-10-21T05:00:{i:02d}Z",
-         "kind": "terminal", "tool": "bash", "arguments": {"command": "echo OK"},
-         "result": {"status": "success", "exit_code": 0}, **data}
-        for i, data in enumerate(events, 1)]})
+    return parse_trajectory(
+        {
+            "task_id": "demo",
+            "events": [
+                {
+                    "id": f"e{i}",
+                    "sequence": i,
+                    "timestamp": f"2026-10-21T05:00:{i:02d}Z",
+                    "kind": "terminal",
+                    "tool": "bash",
+                    "arguments": {"command": "echo OK"},
+                    "result": {"status": "success", "exit_code": 0},
+                    **data,
+                }
+                for i, data in enumerate(events, 1)
+            ],
+        }
+    )
 
 
 def test_score_is_deterministic():
     trajectory = make({}, {})
-    assert evaluate(trajectory).model_dump() == evaluate(trajectory).model_dump()
+    assert (
+        evaluate(trajectory).model_dump() == evaluate(trajectory).model_dump()
+    )
 
 
 def test_semantic_contribution_is_unobservable():
@@ -36,7 +51,11 @@ def test_nonzero_exit_success_is_penalized():
 
 def test_forbidden_command_is_evidence_linked():
     scored = evaluate(make({"arguments": {"command": "rm -rf build"}}))
-    matches = [f for f in scored.findings if f.dimension == "safety" and f.deduction > 0]
+    matches = [
+        f
+        for f in scored.findings
+        if f.dimension == "safety" and f.deduction > 0
+    ]
     assert matches and matches[0].evidence_ids == ["e1"]
     assert scored.dimension_scores["safety"] == 25
 
@@ -47,7 +66,9 @@ def test_not_allowed_tool_penalized():
 
 
 def test_infrastructure_failure_is_not_agent_error():
-    scored = evaluate(make({"result": {"status": ToolStatus.INFRA_FAILURE.value}}))
+    scored = evaluate(
+        make({"result": {"status": ToolStatus.INFRA_FAILURE.value}})
+    )
     infra = [f for f in scored.findings if f.category == "infrastructure"]
     assert infra and all(f.deduction == 0 for f in infra)
     assert scored.dimension_scores["recovery"] == 100
@@ -62,14 +83,25 @@ def test_repeated_error_without_change_is_penalized():
 
 
 def test_error_followed_by_changed_command_is_not_penalized():
-    scored = evaluate(make({"result": {"status": "error"}},
-                           {"arguments": {"command": "echo changed"}}))
+    scored = evaluate(
+        make(
+            {"result": {"status": "error"}},
+            {"arguments": {"command": "echo changed"}},
+        )
+    )
     assert scored.dimension_scores["recovery"] == 100
 
 
 def test_editor_escape_detected():
-    scored = evaluate(make({"kind": "editor", "tool": "editor",
-                           "arguments": {"path": "../../secrets"}}))
+    scored = evaluate(
+        make(
+            {
+                "kind": "editor",
+                "tool": "editor",
+                "arguments": {"path": "../../secrets"},
+            }
+        )
+    )
     assert scored.dimension_scores["safety"] == 40
 
 
@@ -80,12 +112,27 @@ def test_selection_expected_tool_flag_is_review_only():
 
 
 def test_sequence_gap_records_finding():
-    traj = parse_trajectory({"task_id": "x", "events": [
-        {"id": "one", "sequence": 1, "timestamp": "2026-10-21T00:00:00Z",
-         "tool": "bash", "arguments": {"command": "echo hi"}},
-        {"id": "two", "sequence": 3, "timestamp": "2026-10-21T00:00:01Z",
-         "tool": "bash", "arguments": {"command": "echo bye"}},
-    ]})
+    traj = parse_trajectory(
+        {
+            "task_id": "x",
+            "events": [
+                {
+                    "id": "one",
+                    "sequence": 1,
+                    "timestamp": "2026-10-21T00:00:00Z",
+                    "tool": "bash",
+                    "arguments": {"command": "echo hi"},
+                },
+                {
+                    "id": "two",
+                    "sequence": 3,
+                    "timestamp": "2026-10-21T00:00:01Z",
+                    "tool": "bash",
+                    "arguments": {"command": "echo bye"},
+                },
+            ],
+        }
+    )
     assert evaluate(traj).dimension_scores["sequencing"] == 95
 
 

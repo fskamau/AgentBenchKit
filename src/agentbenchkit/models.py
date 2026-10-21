@@ -4,7 +4,13 @@ from datetime import datetime
 from enum import StrEnum
 from typing import Any, Literal
 
-from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
+from pydantic import (
+    BaseModel,
+    ConfigDict,
+    Field,
+    field_validator,
+    model_validator,
+)
 
 
 class EventKind(StrEnum):
@@ -68,9 +74,13 @@ class Trajectory(BaseModel):
             if event.id in ids:
                 raise ValueError(f"event {event.id}: duplicate event id")
             if event.sequence <= previous_sequence:
-                raise ValueError(f"event {event.id}: sequence must strictly increase")
+                raise ValueError(
+                    f"event {event.id}: sequence must strictly increase"
+                )
             if previous_time and event.timestamp < previous_time:
-                raise ValueError(f"event {event.id}: timestamp precedes previous event")
+                raise ValueError(
+                    f"event {event.id}: timestamp precedes previous event"
+                )
             ids.add(event.id)
             previous_sequence = event.sequence
             previous_time = event.timestamp
@@ -83,7 +93,9 @@ class Finding(BaseModel):
     message: str
     evidence_ids: list[str] = Field(min_length=1)
     deduction: float = Field(default=0, ge=0)
-    category: Literal["agent", "infrastructure", "uncertain", "observation"] = "agent"
+    category: Literal["agent", "infrastructure", "uncertain", "observation"] = (
+        "agent"
+    )
 
 
 class Evaluation(BaseModel):
@@ -108,7 +120,9 @@ class ProcessResult(BaseModel):
 
 class TestResult(BaseModel):
     process: ProcessResult
-    classification: Literal["passed", "failed", "setup_error", "timeout", "infrastructure_error"]
+    classification: Literal[
+        "passed", "failed", "setup_error", "timeout", "infrastructure_error"
+    ]
     failed_tests: list[str] = Field(default_factory=list)
 
 
